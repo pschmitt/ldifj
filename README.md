@@ -1,7 +1,7 @@
 # ldifj
 
 This Python script parses LDAP Data Interchange Format (LDIF) files,
-allows for the extraction of entries and, optionally, metadata.
+and outputs **JSON**!
 
 ## 🛠 Installation
 
