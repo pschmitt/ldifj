@@ -8,10 +8,11 @@ from io import BytesIO
 
 from ldif import LDIFParser
 from rich import print, print_json
+from rich_argparse import RichHelpFormatter
 
 
 def parse_args():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=RichHelpFormatter)
     parser.add_argument(
         "--metadata",
         "-m",
@@ -20,9 +21,12 @@ def parse_args():
         default=False,
     )
     parser.add_argument(
-        "FILE", nargs="?", help="LDIF file to parse", default="-"
+        "FILE",
+        nargs="?",
+        help="LDIF file to parse, set to '-' to read from stdin",
+        type=argparse.FileType("r"),
     )
-    return parser.parse_args()
+    return parser, parser.parse_args()
 
 
 def divide_ldif(content):
@@ -65,13 +69,15 @@ def parse_ldif(record):
 
 
 def main():
-    args = parse_args()
+    parser, args = parse_args()
 
-    if args.FILE == "-":
+    if not args.FILE or args.FILE == "-":
+        if sys.stdin.isatty():
+            parser.print_help()
+            sys.exit(2)
         content = sys.stdin.read()
     else:
-        with open(args.FILE, "r") as file:
-            content = file.read()
+        content = args.FILE.read()
 
     metadata, records = divide_ldif(content)
 

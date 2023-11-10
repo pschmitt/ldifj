@@ -17,7 +17,8 @@ classifiers = [
 ]
 dependencies = [
   "python-ldap",
-  "rich"
+  "rich",
+  "rich-argparse"
 ]
 version = "0.1.0"
 
