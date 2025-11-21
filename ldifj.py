@@ -47,12 +47,18 @@ class MyLDIF(LDIFParser):
             k: (
                 vs[0].decode("utf-8", "replace")
                 if isinstance(vs[0], bytes)
-                else vs[0]
-                if len(vs) == 1
-                else [
-                    v.decode("utf-8", "replace") if isinstance(v, bytes) else v
-                    for v in vs
-                ]
+                else (
+                    vs[0]
+                    if len(vs) == 1
+                    else [
+                        (
+                            v.decode("utf-8", "replace")
+                            if isinstance(v, bytes)
+                            else v
+                        )
+                        for v in vs
+                    ]
+                )
             )
             for k, vs in entry.items()
         }
